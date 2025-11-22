@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CartEye</title>
+  <style>
+    /* --- Animated gradient background --- */
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(-45deg, #1e3c72, #2a5298, #00c6ff, #0072ff);
+      background-size: 400% 400%;
+      animation: gradient 7s ease infinite;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    /* --- Container for logo + text --- */
+    .logo-container {
+      text-align: center;
+      color: white;
+      animation: fadeIn 1.5s ease forwards;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* --- Glassy glowing circle --- */
+    .logo {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(14px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 25px;
+      box-shadow: 0 0 35px rgba(255,255,255,0.4);
+      animation: pulse 2.5s infinite ease-in-out;
+    }
+
+    .logo img {
+      width: 140px; /* bigger logo */
+      height: 140px;
+      object-fit: contain;
+      border-radius: 12px;
+      filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 25px rgba(255,255,255,0.3); }
+      50% { transform: scale(1.06); box-shadow: 0 0 45px rgba(255,255,255,0.8); }
+      100% { transform: scale(1); box-shadow: 0 0 25px rgba(255,255,255,0.3); }
+    }
+
+    h1 {
+      font-size: 38px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #fff;
+      text-shadow: 0 0 12px rgba(255,255,255,0.5);
+      margin-bottom: 6px;
+    }
+
+    p {
+      font-size: 18px;
+      opacity: 0.9;
+      margin-top: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .tap-hint {
+      margin-top: 40px;
+      font-size: 14px;
+      opacity: 0.8;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="logo-container" id="splash">
+    <div class="logo">
+      <img src="Gemini_Generated_Image_hhfu7ihhfu7ihhfu.png" alt="CartEye Logo">
+    </div>
+    <h1>CartEye</h1>
+    <p>Scan Faster. Shop Safer.</p>
+    <div class="tap-hint">Tap anywhere to continue →</div>
+  </div>
+
+  <script>
+    const splash = document.getElementById("splash");
+
+    // Auto redirect after 3 seconds
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 3000);
+
+    // Tap to continue early
+    splash.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

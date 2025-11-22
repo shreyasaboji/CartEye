@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: gap: https://ssl.gstatic.com 'unsafe-inline' 'unsafe-eval'; connect-src *;">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <title>SmartCart Login</title>
+  <style>
+    /* --- BACKGROUND ANIMATION --- */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(-45deg, #2c3e50, #4e73a6, #6a5acd, #2c3e50);
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+
+    @keyframes gradient-animation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* --- LOGIN BOX STYLES --- */
+    .login-box {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      width: 340px;
+      text-align: center;
+      animation: card-pop-in 0.6s ease-out forwards;
+      opacity: 0;
+      backdrop-filter: blur(2px);
+    }
+
+    @keyframes card-pop-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #1e3c72;
+      font-weight: 700;
+    }
+
+    /* --- INPUT & SELECT STYLES --- */
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+      font-size: 16px;
+      color: #333;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #6a5acd;
+      box-shadow: 0 0 0 3px rgba(106, 90, 205, 0.2);
+      outline: none;
+    }
+
+    /* --- BUTTON STYLES --- */
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #4e73a6;
+      color: white;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      transition: background 0.3s ease-in-out, transform 0.1s;
+    }
+
+    button:hover {
+      background: #6a5acd;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>SmartCart Login</h2>
+    <select id="role">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+    <input type="email" id="email" placeholder="Enter Email" required>
+    <input type="password" id="password" placeholder="Enter Password" required>
+    <button onclick="login()">Login</button>
+  </div>
+
+  <script>
+    function login() {
+      const role = document.getElementById('role').value;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      // --- ADMIN LOGIN ---
+      if (role === 'admin' && email === 'admin@gmail.com' && password === 'admin123') {
+        localStorage.setItem('role', 'admin');
+        window.location.href = 'admin.html';
+      }
+      // --- USER LOGIN ---
+      else if (role === 'user' && email === 'user1@gmail.com' && password === 'user123') {
+        localStorage.setItem('role', 'user');
+        localStorage.setItem('userEmail', email);
+        window.location.href = 'user.html';
+      }
+      // --- INVALID ---
+      else {
+        alert('❌ Invalid credentials! Please try again.');
+      }
+    }
+  </script>
+</body>
+</html>

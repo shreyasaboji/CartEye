@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>SmartCart Admin Dashboard</title>
+  <style>
+    /* === Animated Gradient Background === */
+   body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(-45deg, #2c3e50, #4e73a6, #6a5acd, #2c3e50);
+  background-size: 400% 400%;
+  animation: gradient-animation 15s ease infinite;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+    /* === Glass Card Style === */
+    .container {
+      max-width: 1000px;
+      width: 90%;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(5px);
+      animation: fade-in 0.7s ease-out;
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3c72;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    #logoutBtn {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      float: right;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.1s;
+    }
+
+    #logoutBtn:hover {
+      background: #e63946;
+      transform: translateY(-1px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: #4e73a6;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    tr:hover {
+      background: rgba(106, 90, 205, 0.1);
+    }
+
+    img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    input {
+      width: 80px;
+      text-align: center;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+
+    button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-save {
+      background: #28a745;
+      color: white;
+      transition: background 0.3s, transform 0.1s;
+    }
+
+    .btn-save:hover {
+      background: #218838;
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="adminBox">
+    <button id="logoutBtn" onclick="logout()">Logout</button>
+    <h2>🛍️ SmartCart Admin Dashboard</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Price (₹)</th>
+          <th>Stock</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="productTable"></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Default Products
+    const defaultProducts = [
+      { id: 1, name: "coke", unit_price: 20, stock: 15, img: "images/coke.jpg" },
+      { id: 2, name: "sprite", unit_price: 20, stock: 50, img: "images/sprite.jpg" },
+      
+      { id: 3, name: "Water Bottle", unit_price: 100, stock: 30, img: "images/waterbottle.png" },
+      { id: 4, name: "Detergent", unit_price: 500, stock: 10, img: "images/detergent.png" },
+        ];
+
+    // Load and Display Products
+    function loadProducts() {
+      let products = JSON.parse(localStorage.getItem("products")) || defaultProducts;
+      const table = document.getElementById("productTable");
+      table.innerHTML = "";
+
+      products.forEach(p => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><img src="${p.img}" alt="${p.name}"></td>
+          <td>${p.name}</td>
+          <td><input type="number" id="price_${p.id}" value="${p.unit_price}"></td>
+          <td><input type="number" id="stock_${p.id}" value="${p.stock}"></td>
+          <td><button class="btn-save" onclick="updateProduct(${p.id})">Save</button></td>
+        `;
+        table.appendChild(row);
+      });
+    }
+
+    // Save manual updates
+    function updateProduct(id) {
+      let products = JSON.parse(localStorage.getItem("products")) || defaultProducts;
+      const product = products.find(p => p.id === id);
+      if (!product) return;
+
+      product.unit_price = parseFloat(document.getElementById(`price_${id}`).value);
+      product.stock = parseInt(document.getElementById(`stock_${id}`).value);
+
+      localStorage.setItem("products", JSON.stringify(products));
+      alert("✅ Product updated successfully!");
+      loadProducts();
+    }
+
+    // Reduce stock after checkout
+    function applyCheckoutStockReduction() {
+      let products = JSON.parse(localStorage.getItem("products")) || defaultProducts;
+      const purchasedItems = JSON.parse(localStorage.getItem("purchasedItems")) || [];
+
+      if (purchasedItems.length > 0) {
+        purchasedItems.forEach(item => {
+          const product = products.find(p => p.id === item.id);
+          if (product) {
+            product.stock = Math.max(0, product.stock - item.qty);
+          }
+        });
+        localStorage.setItem("products", JSON.stringify(products));
+        localStorage.removeItem("purchasedItems"); // clear after applying
+      }
+    }
+
+    function logout() {
+      window.location.href = "index.html";
+    }
+
+    // Initialize
+    window.onload = function() {
+      applyCheckoutStockReduction();
+      loadProducts();
+    }
+  </script>
+</body>
+</html>
